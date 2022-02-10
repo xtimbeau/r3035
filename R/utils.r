@@ -1,14 +1,4 @@
-#' Crée un pavage carré en tant que géométrie d'un sf à partir de idINS.
-#'
-#' @param ids vecteur d'idINS.
-#' @param resolution resolution, par défaut celle attachée à idINS.
-#'
-#'
-#' @import sf
-#' @export
-
-
-#' Crée un raster de référence, vide.
+#' raster ref
 #'
 #' @param data sf.
 #' @param resolution par défaut, 200.

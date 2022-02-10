@@ -126,6 +126,13 @@ dt2r <- function(dt, resolution=NULL, idINS="idINS")
 
 # fabrique un raster de référence, vide
 #
+#' Title
+#'
+#' @param data
+#' @param resolution
+#' @param crs
+#'
+#' @return
 raster_ref <- function(data, resolution=200, crs=3035)
 {
   alignres <- max(resolution, 200)
