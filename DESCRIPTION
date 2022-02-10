@@ -1,0 +1,24 @@
+Package: maputils
+Type: Package
+Title: Quelques fonctions utiles pour les données géographiques
+Version: 0.1.0
+Author: X. Timbeau M. Parodi
+Maintainer: <xavier.timbeau@sciencespo.fr>
+Description: Les principales fonctions sont des fonctions de manipulation des idINS, des ratser de fonctions passant des uns ou des autres.
+     Il y a également une fonction ggplot pour afficher des raster en prj 30305.
+License: CeCILL-B
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+Depends:
+  sf,
+  raster,
+  stars, 
+  terra,
+  ggplot2,
+  stringr,
+  dplyr,
+  glue,
+  purrr,
+Imports:
+  data.table
