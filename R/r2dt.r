@@ -52,6 +52,7 @@ getresINS <- function(dt, idINS="idINS") {
 
 # vérifie qu'il y a un idINS et détermine la résolution, interne
 getINSres <- function(dt, resolution, idINS="idINS") {
+
   rr <- getresINS(dt, idINS)
   ncol <- names(dt)
   if(length(rr)==0)

@@ -266,3 +266,18 @@ uf2si2 <- function(number, rounding = TRUE, unit = "median", digits_max=4) {
   }
   f2
 }
+
+factor2num <- function(f) {
+  if (is.factor(f)) {
+    if (!any(is.na(suppressWarnings(as.numeric(levels(f)))))) {
+      as.numeric(levels(f))[f]
+    } else {
+      as.numeric(f)
+    }
+  }
+  else if (is.logical(f)) {
+    as.numeric(f)
+  } else {
+    as.numeric(f)
+  }
+}

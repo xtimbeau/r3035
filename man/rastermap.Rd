@@ -12,7 +12,7 @@ rastermap(
   dropth = 0,
   n = 5,
   rev = FALSE,
-  palette = sequential_hcl(n = n, palette = "Terrain 2", rev = rev),
+  palette = colorspace::sequential_hcl(n = n, palette = "Terrain 2", rev = rev),
   style = "kmeans",
   resolution = 50,
   decor = NULL,
