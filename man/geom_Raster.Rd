@@ -24,5 +24,5 @@ une couche ggplot2
 }
 \description{
 geom_raster demande de préciser le système de coordonnées (aes(x=lon, y=lat)). \code{geom_Ratser} (avec un R majuscule)
-permet de s'en passer. Attention le système de coordonnées est automatiquement 3035.
+permet de s'en passer. Attention le système de coordonnées est uniquement 3035.
 }

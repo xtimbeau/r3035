@@ -4,10 +4,20 @@
 \alias{rastervar}
 \title{ratervar}
 \usage{
-rastervar(data, ..., fun = mean, dropth = 0, resolution = 50, idINS = "idINS")
+rastervar(data, ..., fun = mean, dropth = 0, resolution = 200, idINS = "idINS")
 }
 \arguments{
-\item{idINS}{}
+\item{data}{données (tibble, data.frame) avec un idINS ou un sf (l'idINS sera fabriqué par projection sur une grille 3035)}
+
+\item{...}{expressions en quasiquotation}
+
+\item{fun}{fonction d'agrégagtion}
+
+\item{dropth}{Elimine les extrêmes de la distribtion (un double, inférieur à 1)}
+
+\item{resolution}{résolution par défaut 200}
+
+\item{idINS}{nom de la variable idINS}
 }
 \value{
 

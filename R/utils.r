@@ -4,15 +4,14 @@
 #' @param resolution par défaut, 200.
 #' @param crs par défaut, 3035 (European Terrestrial Reference System).
 #'
-#' @import sf
 #' @export
 raster_ref <- function(data, resolution=200, crs=3035)
 {
   alignres <- max(resolution, 200)
   if(checkmate::testMultiClass(data,c("sf", "sfc")))
   {
-    b <- st_bbox(data)
-    crss <- st_crs(data)$proj4string
+    b <- sf::st_bbox(data)
+    crss <- sf::st_crs(data)$proj4string
   }
   else
   {
@@ -22,7 +21,7 @@ raster_ref <- function(data, resolution=200, crs=3035)
       xmax=max(data$x, na.rm=TRUE),
       ymin=min(data$y, na.rm=TRUE),
       ymax=max(data$y, na.rm=TRUE))
-    crss <- sp::CRS(st_crs(crs)$proj4string)
+    crss <- sp::CRS(sf::st_crs(crs)$proj4string)
   }
   ext <- raster::extent(
     floor(b$xmin / alignres )*alignres,
@@ -56,7 +55,6 @@ getresINS <- function(dt, idINS="idINS") {
 #' @param idINS nom de la variable idINS, par défaut "idINS".
 #'
 #' @import data.table
-#' @import sf
 #'
 #' @export
 dt2r <- function(dt, resolution=NULL, idINS="idINS")
@@ -113,7 +111,6 @@ dt2r <- function(dt, resolution=NULL, idINS="idINS")
 #' @param digits nombre de chiffre après la virgule.
 #' @param unit méthode de choix de l'unité ("median" par défaut)
 #'
-#' @importFrom stats median
 f2si2 <- function(number, rounding = TRUE, digits = 1, unit = "median") {
   lut <- c(
     1e-24, 1e-21, 1e-18, 1e-15, 1e-12, 1e-09, 1e-06,

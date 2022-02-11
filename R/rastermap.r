@@ -32,7 +32,6 @@ rastermap <-
            resolution=50,
            decor=NULL,
            bbox=NULL, ...) {
-    library("tmap", quietly=TRUE)
 
     quo_var <- rlang::enquo(var)
 
@@ -41,18 +40,18 @@ rastermap <-
     text.temp <-ifelse(!is.null(label), label, rlang::quo_name(quo_var))
     decor$fdc+
       tmap::tm_shape(raster.temp, bbox=bbox) +
-      tmap::tm_raster(title = str_c("Dens. ", text.temp), style=style, palette = palette, n=n, ...)+
+      tmap::tm_raster(title = stringr::str_c("Dens. ", text.temp), style=style, palette = palette, n=n, ...)+
       decor$hdc
   }
 
 #' ratervar
 #'
-#' @param data
-#' @param ...
-#' @param fun
-#' @param dropth
-#' @param resolution
-#' @param idINS
+#' @param data données (tibble, data.frame) avec un idINS ou un sf (l'idINS sera fabriqué par projection sur une grille 3035)
+#' @param ... expressions en quasiquotation
+#' @param fun fonction d'agrégagtion
+#' @param dropth Elimine les extrêmes de la distribtion (un double, inférieur à 1)
+#' @param resolution résolution par défaut 200
+#' @param idINS nom de la variable idINS
 #'
 #' @return
 #' @import data.table
@@ -61,12 +60,14 @@ rastervar <-
   function(data, ...,
            fun=mean, # opérateur d'aggrégation
            dropth = 0, # drop 1% des valeurs extrêmes
-           resolution=50, idINS="idINS") {
- require("data.table")
+           resolution=200, idINS="idINS") {
     quo_var <- rlang::enquos(...)
     idinspire <- getINSres(data,resolution=resolution,idINS=idINS)
     if (any(idinspire==FALSE))
-      idinspire <- idINS3035(sf::st_coordinates(sf::st_centroid(data %>% sf::st_as_sf())), resolution=resolution)
+      idinspire <- idINS3035(
+        sf::st_coordinates(
+          sf::st_centroid(data %>% sf::st_as_sf())),
+        resolution=resolution)
     else
       idinspire <- data[[idinspire]]
 
@@ -78,8 +79,8 @@ rastervar <-
 
     vars <- rlang::set_names(names(data.temp))
     isnum <- purrr::map_lgl(data.temp, is.numeric)
-    # data.temp <- data.temp[, lapply(.SD, factor2num)]
-    for (j in names(data.temp)) set(data.temp, j = j, value = factor2num(data.temp[[j]]))
+    data.temp <- data.temp[, lapply(.SD, factor2num)]
+    # for (j in names(data.temp)) set(data.temp, j = j, value = factor2num(data.temp[[j]]))
     obs_na <- purrr::map(data.temp, ~is.na(.x))
     obs_drop <- purrr::reduce(obs_na, `&`)
     set(data.temp, j="idINS", value=idinspire)

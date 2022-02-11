@@ -23,5 +23,6 @@ Depends:
   dplyr,
   glue,
   purrr,
+  checkmate
 Imports:
   data.table
