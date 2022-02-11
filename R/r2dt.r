@@ -129,9 +129,9 @@ dt2r <- function(dt, resolution=NULL, idINS="idINS")
 #
 #' Title
 #'
-#' @param data
-#' @param resolution
-#' @param crs
+#' @param data un sf ou n'importe quoi qui répond à st_bbox
+#' @param resolution la résolution
+#' @param crs le systeme de coordonnées
 #'
 #' @return
 raster_ref <- function(data, resolution=200, crs=3035)

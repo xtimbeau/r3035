@@ -4,11 +4,11 @@ Title: Quelques fonctions utiles pour les données géographiques en grille 3035
 Version: 0.1.0
 Author: X. Timbeau M. Parodi
 Maintainer: <xavier.timbeau@sciencespo.fr>
-Description: Permet de créer des idINS conforme au standard (incluant la résolution) à des résolutions diverses
-             Permet de transformer un raster ou un stars 3035 en dtaa.table et réciproquement
-             Permet de projetter un raster RGB en coordonnées 3035
-             Fournit une fonction qui afffiche une carte à partir d'un sf ou d'un data.table ou d'un tibble pour le rasterizer et le mapper
-             Fournit une fonction pour afficher un ratser avec ggplot2
+Description: Permet de créer des idINS conforme au standard (incluant la résolution) à des résolutions diverses.
+             Permet de transformer un raster ou un stars 3035 en dtaa.table et réciproquement.
+             Permet de projetter un raster RGB en coordonnées 3035.
+             Fournit une fonction qui afffiche une carte à partir d'un sf ou d'un data.table ou d'un tibble pour le rasterizer et le mapper.
+             Fournit une fonction pour afficher un ratser avec ggplot2.
 License: CeCILL-B
 Encoding: UTF-8
 LazyData: true
