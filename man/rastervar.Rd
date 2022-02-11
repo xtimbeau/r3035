@@ -4,7 +4,15 @@
 \alias{rastervar}
 \title{ratervar}
 \usage{
-rastervar(data, ..., fun = mean, dropth = 0, resolution = 200, idINS = "idINS")
+rastervar(
+  data,
+  ...,
+  fun = mean,
+  dropth = 0,
+  resolution = Inf,
+  idINS = "idINS",
+  res_def = 200
+)
 }
 \arguments{
 \item{data}{données (tibble, data.frame) avec un idINS ou un sf (l'idINS sera fabriqué par projection sur une grille 3035)}
@@ -15,9 +23,11 @@ rastervar(data, ..., fun = mean, dropth = 0, resolution = 200, idINS = "idINS")
 
 \item{dropth}{Elimine les extrêmes de la distribtion (un double, inférieur à 1)}
 
-\item{resolution}{résolution par défaut 200}
+\item{resolution}{résolution par défaut, cherche la plus fine, sinon, calcule à res_def}
 
 \item{idINS}{nom de la variable idINS}
+
+\item{res_def}{résolution par défaut si pas de idINS fourni}
 }
 \value{
 

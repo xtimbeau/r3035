@@ -12,7 +12,8 @@
 #' @param rev palette à l'endroit ou à l'envers (FALSE par défaut)
 #' @param palette une palette de couleur (terrain 2 par défaut)
 #' @param style passé à tmap, style de la carte
-#' @param resolution résolution du raster (200m par défaut)
+#' @param resolution résolution du raster (par défaut cherche la meilleure résolution disponible, sinon, caclule res_def sur le sf)
+#' @param res_def résolution par défaut si aucun idINS n'est fournit
 #' @param decor sous couche de carte à ajouter (doit contenir un $fdc en dessous, et un $hdc au dessus)
 #' @param bbox boite englobant la carte
 #' @param ... paramètres supplémentaires passés à tmap
@@ -29,13 +30,14 @@ rastermap <-
            rev=FALSE,
            palette=colorspace::sequential_hcl(n=n, palette="Terrain 2", rev=rev),
            style="kmeans",
-           resolution=50,
+           resolution=Inf,
+           res_def = 200,
            decor=NULL,
            bbox=NULL, ...) {
 
     quo_var <- rlang::enquo(var)
 
-    raster.temp <- rastervar(data=data, var={{var}}, fun=fun, dropth=dropth, resolution=resolution)
+    raster.temp <- rastervar(data=data, var={{var}}, fun=fun, dropth=dropth, resolution=resolution, res_def=res_def)
 
     text.temp <-ifelse(!is.null(label), label, rlang::quo_name(quo_var))
     decor$fdc+
@@ -50,8 +52,9 @@ rastermap <-
 #' @param ... expressions en quasiquotation
 #' @param fun fonction d'agrégagtion
 #' @param dropth Elimine les extrêmes de la distribtion (un double, inférieur à 1)
-#' @param resolution résolution par défaut 200
+#' @param resolution résolution par défaut, cherche la plus fine, sinon, calcule à res_def
 #' @param idINS nom de la variable idINS
+#' @param res_def résolution par défaut si pas de idINS fourni
 #'
 #' @return
 #' @import data.table
@@ -60,9 +63,11 @@ rastervar <-
   function(data, ...,
            fun=mean, # opérateur d'aggrégation
            dropth = 0, # drop 1% des valeurs extrêmes
-           resolution=200, idINS="idINS") {
+           resolution=Inf, idINS="idINS", res_def = 200) {
     quo_var <- rlang::enquos(...)
-    idinspire <- getINSres(data,resolution=resolution,idINS=idINS)
+    findres <- getINSres(data,resolution=resolution,idINS=idINS)
+    idinspire <- findres$idINS
+    resolution <- findres$res
     if (any(idinspire==FALSE))
       idinspire <- idINS3035(
         sf::st_coordinates(
@@ -87,8 +92,10 @@ rastervar <-
     data.temp <- data.temp[!obs_drop,]
 
     if (dropth>0)
-      for(v in vars(isnum))
+      for(v in names(isnum))
+      {
         data.temp[, (v):=ifelse(selxth(get(v), dropth), get(v), NA_real_)]
+      }
     data.temp <- data.temp[, lapply(.SD, function(x) fun(x, na.rm=TRUE)), by=idINS]
 
     dt2r(data.temp, resolution=resolution, idINS="idINS")

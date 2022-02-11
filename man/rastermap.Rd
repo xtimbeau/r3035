@@ -14,7 +14,8 @@ rastermap(
   rev = FALSE,
   palette = colorspace::sequential_hcl(n = n, palette = "Terrain 2", rev = rev),
   style = "kmeans",
-  resolution = 50,
+  resolution = Inf,
+  res_def = 200,
   decor = NULL,
   bbox = NULL,
   ...
@@ -39,7 +40,9 @@ rastermap(
 
 \item{style}{passé à tmap, style de la carte}
 
-\item{resolution}{résolution du raster (200m par défaut)}
+\item{resolution}{résolution du raster (par défaut cherche la meilleure résolution disponible, sinon, caclule res_def sur le sf)}
+
+\item{res_def}{résolution par défaut si aucun idINS n'est fournit}
 
 \item{decor}{sous couche de carte à ajouter (doit contenir un $fdc en dessous, et un $hdc au dessus)}
 

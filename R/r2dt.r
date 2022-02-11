@@ -52,14 +52,15 @@ getresINS <- function(dt, idINS="idINS") {
 
 # vérifie qu'il y a un idINS et détermine la résolution, interne
 getINSres <- function(dt, resolution, idINS="idINS") {
-
   rr <- getresINS(dt, idINS)
   ncol <- names(dt)
   if(length(rr)==0)
     return(FALSE)
+  if (resolution==Inf)
+    resolution <- min(unlist(purrr::transpose(rr)$res))
   isresin <- purrr::map_lgl(rr, ~.x[["res"]]==resolution)
   if(any(isresin))
-    return(rr[which(isresin)][[1]]$idINS)
+    return(list(idINS = rr[which(isresin)][[1]]$idINS, res = resolution))
   else
     return(FALSE)
 }

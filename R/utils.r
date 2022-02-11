@@ -268,3 +268,16 @@ factor2num <- function(f) {
     as.numeric(f)
   }
 }
+
+# sélectionne le centre d'une distribution
+
+selxth <- function(vecteur, xth = 0.01) {
+  if (is.numeric(vecteur)) {
+    pv <- quantile(vecteur, c(xth / 2, 1 - xth / 2), na.rm = TRUE)
+    (!is.na(vecteur)) & vecteur >= pv[[1]] & vecteur <= pv[[2]]
+  }
+  else {
+    rep(TRUE, length(vecteur))
+  }
+}
+
