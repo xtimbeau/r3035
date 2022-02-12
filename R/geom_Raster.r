@@ -45,12 +45,12 @@ kbins <- function(x, k=5, bins="factor")
 {
   kmeans <- kmeans(x, centers=k, nstart=1L, iter.max = 1000, algorithm = "Lloyd")
   cc <- tibble::tibble(centers = as.vector(kmeans$centers), i = 1:nrow(kmeans$centers))
-  cc <- cc %>%
-    dplyr::arrange(cc, centers) %>%
-    dplyr::mutate(ii=row_number()) %>% arrange(i) %>% pull(ii)
+  cc <- cc  |>
+    dplyr::arrange(cc, centers)  |>
+    dplyr::mutate(ii=row_number())  |>  arrange(i)  |>  pull(ii)
   res <- tibble::tibble( x = x, cluster=cc[kmeans$cluster])
-  minmax <- res %>%
-    dplyr::group_by(cluster) %>%
+  minmax <- res  |>
+    dplyr::group_by(cluster)  |>
     dplyr::summarize(max=max(x), min=min(x), mean=mean(x), median=median(x))
   if(bins=="factor")
     return(factor(res$cluster, labels=str_c("[", uf2si2(minmax$min), ", ", uf2si2(minmax$max), "]")))

@@ -40,7 +40,7 @@ getresINS <- function(dt, idINS="idINS") {
   purrr::map(
     purrr::keep(names(dt), ~stringr::str_detect(.x,idINS)),
     ~{
-      r<-stringr::str_extract(dt[[.x]], "(?<=r)[0-9]+") %>%
+      r<-stringr::str_extract(dt[[.x]], "(?<=r)[0-9]+")  |>
         as.numeric()
       ur <- unique(r)
       if (length(ur)==0)

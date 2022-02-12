@@ -76,8 +76,8 @@ rastervar <-
     else
       idinspire <- data[[idinspire]]
 
-    data.temp <- purrr::map_dfc(quo_var, ~{data %>%
-        dplyr::as_tibble() %>%
+    data.temp <- purrr::map_dfc(quo_var, ~{data  |>
+        dplyr::as_tibble()  |>
         dplyr::transmute(!!rlang::quo_name(.x) := !!.x)})
 
     data.table::setDT(data.temp)
