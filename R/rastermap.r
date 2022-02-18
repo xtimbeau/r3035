@@ -12,6 +12,7 @@
 #' @param rev palette à l'endroit ou à l'envers (FALSE par défaut)
 #' @param palette une palette de couleur (terrain 2 par défaut)
 #' @param style passé à tmap, style de la carte
+#' @param title titre de la légende, si NULL construit à partir de la variable
 #' @param resolution résolution du raster (par défaut cherche la meilleure résolution disponible, sinon, caclule res_def sur le sf)
 #' @param res_def résolution par défaut si aucun idINS n'est fournit
 #' @param decor sous couche de carte à ajouter (doit contenir un $fdc en dessous, et un $hdc au dessus)
@@ -30,6 +31,7 @@ rastermap <-
            rev=FALSE,
            palette=colorspace::sequential_hcl(n=n, palette="Terrain 2", rev=rev),
            style="kmeans",
+           title=NULL,
            resolution=Inf,
            res_def = 200,
            decor=NULL,
@@ -40,9 +42,11 @@ rastermap <-
     raster.temp <- rastervar(data=data, var={{var}}, fun=fun, dropth=dropth, resolution=resolution, res_def=res_def)
 
     text.temp <-ifelse(!is.null(label), label, rlang::quo_name(quo_var))
+    if(is.null(title))
+      title <- stringr::str_c("Dens. ", text.temp)
     decor$fdc+
       tmap::tm_shape(raster.temp, bbox=bbox) +
-      tmap::tm_raster(title = stringr::str_c("Dens. ", text.temp), style=style, palette = palette, n=n, ...)+
+      tmap::tm_raster(title = title, style=style, palette = palette, n=n, ...)+
       decor$hdc
   }
 

@@ -14,6 +14,7 @@ rastermap(
   rev = FALSE,
   palette = colorspace::sequential_hcl(n = n, palette = "Terrain 2", rev = rev),
   style = "kmeans",
+  title = NULL,
   resolution = Inf,
   res_def = 200,
   decor = NULL,
@@ -39,6 +40,8 @@ rastermap(
 \item{palette}{une palette de couleur (terrain 2 par défaut)}
 
 \item{style}{passé à tmap, style de la carte}
+
+\item{title}{titre de la légende, si NULL construit à partir de la variable}
 
 \item{resolution}{résolution du raster (par défaut cherche la meilleure résolution disponible, sinon, caclule res_def sur le sf)}
 
