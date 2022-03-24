@@ -14,13 +14,13 @@ r2dt <- function(raster, resolution=NULL, fun=mean)
 {
   base_res <- max(raster::res(raster))
   vars <- names(raster)
-  dt <- as.data.frame(raster, xy=TRUE, centroids=TRUE)
-  setDT(dt)
-  dt <- na.omit(melt(dt, measure.vars=vars), "value")
-  dt <- dcast(dt, x+y~variable, value.var="value")
+  dt <- raster::as.data.frame(raster, xy=TRUE, centroids=TRUE)
+  data.table::setDT(dt)
+  dt <- data.table::na.omit(melt(dt, measure.vars=vars), "value")
+  dt <- data.table::dcast(dt, x+y~variable, value.var="value")
   dt[, idINS := idINS3035(x, y, resolution=base_res)]
   id <- string_r::str_c("idINS", base_res)
-  setnames(dt, "idINS",id)
+  data.table::setnames(dt, "idINS",id)
   navars <- setdiff(vars, names(dt))
   rvars <- setdiff(vars, navars)
   if(!is.null(resolution))
@@ -31,7 +31,7 @@ r2dt <- function(raster, resolution=NULL, fun=mean)
   }
   if (length(navars)>0)
     dt[, (navars):=rep(list(rep(NA, nrow(dt))), length(navars))]
-  setkeyv(dt, cols=id)
+  data.table::setkeyv(dt, cols=id)
   dt
 }
 
@@ -80,7 +80,7 @@ getINSres <- function(dt, resolution, idINS="idINS") {
 dt2r <- function(dt, resolution=NULL, idINS="idINS")
 {
   library(data.table, quietly = TRUE)
-  dt <- setDT(dt)
+  dt <- data.table::setDT(dt)
   rr <- getresINS(dt, idINS)
   ncol <- names(dt)
   if(length(rr)==0)
