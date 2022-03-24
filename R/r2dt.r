@@ -16,7 +16,7 @@ r2dt <- function(raster, resolution=NULL, fun=mean)
   vars <- names(raster)
   dt <- raster::as.data.frame(raster, xy=TRUE, centroids=TRUE)
   data.table::setDT(dt)
-  dt <- data.table::na.omit(melt(dt, measure.vars=vars), "value")
+  dt <- na.omit(melt(dt, measure.vars=vars), "value")
   dt <- data.table::dcast(dt, x+y~variable, value.var="value")
   dt[, idINS := idINS3035(x, y, resolution=base_res)]
   id <- string_r::str_c("idINS", base_res)
