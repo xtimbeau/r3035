@@ -48,61 +48,7 @@ getresINS <- function(dt, idINS="idINS") {
     })
 }
 
-#' Crée un raster à partir d'un data.table avec idINS.
-#'
-#' @param dt data.table avec idINS.
-#' @param resolution résolution du raster.
-#' @param idINS nom de la variable idINS, par défaut "idINS".
-#'
-#' @import data.table
-#'
-#' @export
-dt2r <- function(dt, resolution=NULL, idINS="idINS")
-{
-  dt <- setDT(dt)
-  rr <- getresINS(dt, idINS)
-  ncol <- names(dt)
-  if(length(rr)==0)
-    idINSin <- FALSE
-  else
-  {
-    if(!is.null(resolution))
-      isresin <- purrr::map_lgl(rr, ~.x[["res"]]==resolution)
-    else
-      isresin <- c(TRUE, rep(FALSE, length(rr)-1))
-    if(any(isresin))
-    {
-      res <- rr[which(isresin)][[1]]$res
-      idINS <-rr[which(isresin)][[1]]$idINS
-      idINSin <- TRUE
-    }
-    else
-      idINSin <- FALSE
-  }
-  if (!idINSin)
-  {
-    stopifnot(!is.null(res))
-    stopifnot("x" %in% ncol & "y" %in% ncol)
-    dt[, idINS:=idINS3035(x,y,resolution=resolution)]
-    idINS <- "idINS"
-    res <- resolution
-  }
-  xy <- idINS2point(dt[[idINS]], resolution = res)
-  dt[, `:=`(x=xy[,1], y=xy[,2])]
-  rref <- raster_ref(dt, resolution = res, crs=3035)
-  cells <- raster::cellFromXY(rref, xy)
-  layers <- purrr::keep(ncol, ~(is.numeric(dt[[.x]]))&(!.x%in%c("x","y")))
-  brickette <- raster::brick(
-    purrr::map(layers,
-               ~{
-                 r <- raster::raster(rref)
-                 r[cells] <- dt[[.x]]
-                 r
-               }))
-  names(brickette) <- layers
-  raster::crs(brickette) <- 3035
-  brickette
-}
+
 
 #' Mise en forme des nombres (vient de f.communs)
 #'

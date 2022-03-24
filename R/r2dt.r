@@ -65,22 +65,18 @@ getINSres <- function(dt, resolution, idINS="idINS") {
     return(FALSE)
 }
 
-#' data.table vers Raster
+#' Crée un raster à partir d'un data.table avec idINS.
 #'
-#' Transforme un data.table en raster
-#' en ajoutant un idINS
+#' @param dt data.table avec idINS.
+#' @param resolution résolution du raster.
+#' @param idINS nom de la variable idINS, par défaut "idINS".
 #'
-#' @param dt le data.table
-#' @param resolution résolution en mètre pour la transformation (NULL par défaut, récupéré dans le dtaa.table)
-#' @param idINS nom de la colonne de l'idINS (la résolution est ne débat de chaîne rxxxExxxxNxxxx)
 #' @import data.table
-#' @return un raster, dans le système de coordonnées 3035
-#' @export
 #'
+#' @export
 dt2r <- function(dt, resolution=NULL, idINS="idINS")
 {
-  library(data.table, quietly = TRUE)
-  dt <- data.table::setDT(dt)
+  dt <- setDT(dt)
   rr <- getresINS(dt, idINS)
   ncol <- names(dt)
   if(length(rr)==0)
@@ -103,12 +99,12 @@ dt2r <- function(dt, resolution=NULL, idINS="idINS")
   if (!idINSin)
   {
     stopifnot(!is.null(res))
-    stopifnot("x"%in%ncol&"y"%in%ncol)
+    stopifnot("x" %in% ncol & "y" %in% ncol)
     dt[, idINS:=idINS3035(x,y,resolution=resolution)]
     idINS <- "idINS"
     res <- resolution
   }
-  xy <- idINS2point(dt$idINS, resolution = res)
+  xy <- idINS2point(dt[[idINS]], resolution = res)
   dt[, `:=`(x=xy[,1], y=xy[,2])]
   rref <- raster_ref(dt, resolution = res, crs=3035)
   cells <- raster::cellFromXY(rref, xy)
@@ -121,7 +117,7 @@ dt2r <- function(dt, resolution=NULL, idINS="idINS")
                  r
                }))
   names(brickette) <- layers
-  crs(brickette) <- sp::CRS(sf::st_crs(3035)$proj4string)
+  raster::crs(brickette) <- 3035
   brickette
 }
 
