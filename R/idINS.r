@@ -1,3 +1,10 @@
+#' Convertit l'idINS en polygone
+#'
+#' @param ids vecteur d'idINS.
+#' @param resolution resolution, par défaut celle attachée à idINS.
+#'
+#' @export
+#'
 idINS2square <- function(ids, resolution=NULL)
 {
   cr_pos <- stringr::str_locate(ids[[1]], "r(?=[0-9])")[,"start"]+1
