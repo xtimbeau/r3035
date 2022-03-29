@@ -132,3 +132,31 @@ idINS2coord <- function(ids, stop_if_res_not_cst = TRUE) {
 
   res
 }
+
+#' Retrieves (lon, lat) coordinates from idINS.
+#'
+#' @param idINS character vector of idINS
+#' @param resolution default to NULL. Set to convert id with different resolutions
+#'
+#' @export
+idINS2lonlat <- function(idINS, resolution=NULL) {
+  cr_pos <- stringr::str_locate(idINS[[1]], "r(?=[0-9])")[,"start"]+1
+  cy_pos <- stringr::str_locate(idINS[[1]], "N(?=[0-9])")[,"start"]+1
+  cx_pos <- stringr::str_locate(idINS[[1]], "E(?=[0-9])")[,"start"]+1
+  lcoord <- cx_pos-cy_pos-1
+  y <- as.numeric(stringr::str_sub(idINS,cy_pos,cy_pos+lcoord))
+  x <- as.numeric(stringr::str_sub(idINS,cx_pos,cx_pos+lcoord))
+  r <- if(is.null(resolution))
+    as.numeric(stringr::str_sub(idINS,cr_pos,cy_pos-cr_pos))
+  else
+    rep(resolution, length(x))
+  x <- x+r/2
+  y <- y+r/2
+  lonlat <- sf_project(
+    from=st_crs(3035),
+    to=st_crs(4326),
+    pts = matrix(c(x,y), nrow=length(x), ncol=2))
+  lonlat <- as_tibble(lonlat)
+  names(lonlat) <- c("lon", "lat")
+  lonlat
+}
