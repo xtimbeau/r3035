@@ -160,3 +160,41 @@ idINS2lonlat <- function(idINS, resolution=NULL) {
   names(lonlat) <- c("lon", "lat")
   lonlat
 }
+
+#' Calculate euclidean distance between to idINS, in meter
+#'
+#' @param fromidINS character vector of starting idINS
+#' @param toidINS character vector of ending idINS
+#' @param resolution default to NULL. Set if no resolution is provided in idINS
+#'
+#' @export
+#'
+
+idINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
+  stopifnot(length(fromidINS)==length(toidINS))
+  cr_pos <- stringr::str_locate(fromidINS[[1]], "r(?=[0-9])")[,"start"]+1
+  cy_pos <- stringr::str_locate(fromidINS[[1]], "N(?=[0-9])")[,"start"]+1
+  cx_pos <- stringr::str_locate(fromidINS[[1]], "E(?=[0-9])")[,"start"]+1
+  lcoord <- cx_pos-cy_pos-1
+  fromr <- if(is.null(resolution))
+    as.numeric(stringr::str_sub(fromidINS,cr_pos,cy_pos-cr_pos))
+  else
+    rep(resolution, length(fromidINS))
+
+  fromy <- as.numeric(stringr::str_sub(fromidINS,cy_pos,cy_pos+lcoord))+fromr/2
+  fromx <- as.numeric(stringr::str_sub(fromidINS,cx_pos,cx_pos+lcoord))+fromr/2
+
+  cr_pos <- stringr::str_locate(toidINS[[1]], "r(?=[0-9])")[,"start"]+1
+  cy_pos <- stringr::str_locate(toidINS[[1]], "N(?=[0-9])")[,"start"]+1
+  cx_pos <- stringr::str_locate(toidINS[[1]], "E(?=[0-9])")[,"start"]+1
+  lcoord <- cx_pos-cy_pos-1
+  tor <- if(is.null(resolution))
+    as.numeric(stringr::str_sub(toidINS,cr_pos,cy_pos-cr_pos))
+  else
+    rep(resolution, length(toidINS))
+
+  toy <- as.numeric(stringr::str_sub(toidINS,cy_pos,cy_pos+lcoord))+tor/2
+  tox <- as.numeric(stringr::str_sub(toidINS,cx_pos,cx_pos+lcoord))+tor/2
+
+  return(sqrt((tox-fromx)^2 + (toy-fromy)^2))
+}

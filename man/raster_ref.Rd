@@ -15,9 +15,6 @@ raster_ref(data, resolution = 200, crs = 3035)
 
 \item{crs}{par défaut, 3035 (European Terrestrial Reference System).}
 }
-\value{
-
-}
 \description{
 Title
 

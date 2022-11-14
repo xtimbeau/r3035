@@ -29,9 +29,6 @@ rastervar(
 
 \item{res_def}{résolution par défaut si pas de idINS fourni}
 }
-\value{
-
-}
 \description{
 ratervar
 }
