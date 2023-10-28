@@ -140,6 +140,8 @@ idINS2coord <- function(ids, stop_if_res_not_cst = TRUE) {
 #'
 #' @export
 idINS2lonlat <- function(idINS, resolution=NULL) {
+  if(length(idINS)==0)
+    return(tibble::tibble(lon=numeric(), lat=numeric()))
   cr_pos <- stringr::str_locate(idINS[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(idINS[[1]], "N(?=[0-9])")[,"start"]+1
   cx_pos <- stringr::str_locate(idINS[[1]], "E(?=[0-9])")[,"start"]+1
@@ -156,9 +158,8 @@ idINS2lonlat <- function(idINS, resolution=NULL) {
     from=st_crs(3035),
     to=st_crs(4326),
     pts = matrix(c(x,y), nrow=length(x), ncol=2))
-  lonlat <- as_tibble(lonlat)
-  names(lonlat) <- c("lon", "lat")
-  lonlat
+  return(
+    tibble(lon = lonlat[, 1], lat = lonlat[, 2]))
 }
 
 #' Calculate euclidean distance between to idINS, in meter
@@ -172,6 +173,9 @@ idINS2lonlat <- function(idINS, resolution=NULL) {
 
 idINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
   stopifnot(length(fromidINS)==length(toidINS))
+  if(length(fromidINS)==0)
+    return(numeric())
+
   cr_pos <- stringr::str_locate(fromidINS[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(fromidINS[[1]], "N(?=[0-9])")[,"start"]+1
   cx_pos <- stringr::str_locate(fromidINS[[1]], "E(?=[0-9])")[,"start"]+1
