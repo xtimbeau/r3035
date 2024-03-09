@@ -18,7 +18,10 @@ r2dt <- function(raster, resolution=NULL, fun=mean, shortidINS = FALSE)
   data.table::setDT(dt)
   dt <- na.omit(melt(dt, measure.vars=vars), "value")
   dt <- data.table::dcast(dt, x+y~variable, value.var="value")
-  dt[, idINS := idINS3035(x, y, resolution=base_res)]
+  if(shortidINS)
+    dt[, idINS := sidINS3035(x, y, resolution=base_res)]
+  else
+    dt[, idINS := idINS3035(x, y, resolution=base_res)]
   id <- stringr::str_c("idINS", base_res)
   data.table::setnames(dt, "idINS",id)
   navars <- setdiff(vars, names(dt))
