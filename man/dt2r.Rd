@@ -4,7 +4,7 @@
 \alias{dt2r}
 \title{Crée un raster à partir d'un data.table avec idINS.}
 \usage{
-dt2r(dt, resolution = NULL, idINS = "idINS", shortidINS = FALSE)
+dt2r(dt, resolution = NULL, idINS = "idINS")
 }
 \arguments{
 \item{dt}{data.table avec idINS.}

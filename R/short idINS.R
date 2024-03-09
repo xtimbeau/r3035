@@ -131,3 +131,68 @@ sidINS2point <- function(ids, resolution=200)
   colnames(m) <- c("X", "Y")
   m
 }
+
+
+#' Raster vers data.table avec idINS short
+#'
+#' Transforme un raster::ratser en data.table
+#' en ajoutant un idINS. Fonction inverse de sdt2r
+#'
+#' @param raster le raster \code{RatserLayer}, \code{RatserBrick},  \code{RatserStack}
+#' @param resolution résolution en mètre pour la transformation (200m par défaut)
+#' @param fun une fonction pour l'agrégation (mean par défaut)
+#' @import data.table
+#' @return un data.table avec un idINS
+#' @export
+#'
+r2sdt <- function(raster, resolution=200, fun=mean)
+{
+  base_res <- resolution
+  vars <- names(raster)
+  dt <- raster::as.data.frame(raster, xy=TRUE, centroids=TRUE)
+  data.table::setDT(dt)
+  dt <- na.omit(melt(dt, measure.vars=vars), "value")
+  dt <- data.table::dcast(dt, x+y~variable, value.var="value")
+  dt[, idINS := sidINS3035(x, y, resolution=base_res)]
+  navars <- setdiff(vars, names(dt))
+  rvars <- setdiff(vars, navars)
+  if(!is.null(resolution))
+  {
+    id <- "idINS"
+    dt[, idINS:=sidINS3035(x,y,resolution)]
+    dt <- dt[, lapply(.SD, function(x) fun(x, na.rm=TRUE)), by=c(id), .SDcols=rvars]
+  }
+  if (length(navars)>0)
+    dt[, (navars):=rep(list(rep(NA, nrow(dt))), length(navars))]
+  data.table::setkeyv(dt, cols=id)
+  dt
+}
+
+#' Crée un raster à partir d'un data.table avec idINS short
+#'
+#' @param dt data.table avec idINS.
+#' @param resolution résolution du raster.
+#' @param idINS nom de la variable idINS, par défaut "idINS".
+#'
+#' @import data.table
+#'
+#' @export
+sdt2r <- function (dt, resolution = 200, idINS = "idINS")
+{
+  dt <- setDT(dt)
+  stopifnot(!is.null(res))
+  res <- resolution
+  xy <- idINS2point(dt[[idINS]], resolution = res)
+  dt[, `:=`(x = xy[, 1], y = xy[, 2])]
+  rref <- raster_ref(dt, resolution = res, crs = 3035)
+  cells <- raster::cellFromXY(rref, xy)
+  layers <- purrr::keep(ncol, ~(!.x %in% c("x", "y", idINS)))
+  brickette <- raster::brick(purrr::map(layers, ~{
+    r <- raster::raster(rref)
+    r[cells] <- dt[[.x]]
+    r
+  }))
+  names(brickette) <- layers
+  raster::crs(brickette) <- 3035
+  brickette
+}
