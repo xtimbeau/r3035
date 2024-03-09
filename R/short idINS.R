@@ -180,9 +180,10 @@ r2sdt <- function(raster, resolution=200, fun=mean)
 sdt2r <- function (dt, resolution = 200, idINS = "idINS")
 {
   dt <- setDT(dt)
+  ncol <- names(dt)
   stopifnot(!is.null(res))
   res <- resolution
-  xy <- idINS2point(dt[[idINS]], resolution = res)
+  xy <- sidINS2point(dt[[idINS]], resolution = res)
   dt[, `:=`(x = xy[, 1], y = xy[, 2])]
   rref <- raster_ref(dt, resolution = res, crs = 3035)
   cells <- raster::cellFromXY(rref, xy)
