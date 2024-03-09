@@ -19,7 +19,7 @@
 #' @param bbox boite englobant la carte
 #' @param ... paramètres supplémentaires passés à tmap
 #'
-#' @return
+#' @return une carte
 #' @export
 #'
 rastermap <-
@@ -60,7 +60,7 @@ rastermap <-
 #' @param idINS nom de la variable idINS
 #' @param res_def résolution par défaut si pas de idINS fourni
 #'
-#' @return
+#' @return un raster
 #' @import data.table
 #' @export
 rastervar <-

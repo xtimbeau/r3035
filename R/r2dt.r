@@ -123,7 +123,7 @@ dt2r <- function (dt, resolution = NULL, idINS = "idINS")
 #' @param resolution la résolution
 #' @param crs le systeme de coordonnées
 #'
-#' @return
+#' @return un raster
 raster_ref <- function(data, resolution=200, crs=3035)
 {
   alignres <- max(resolution, 200)

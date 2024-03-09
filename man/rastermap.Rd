@@ -53,6 +53,9 @@ rastermap(
 
 \item{...}{paramètres supplémentaires passés à tmap}
 }
+\value{
+une carte
+}
 \description{
 A partir d'un tableau (tibble, data.frame, data.table) équipé d'un champ idINS ou un sf,
 on fabrique un raster pour la variable d'intérêt et on affiche une carte
