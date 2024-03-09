@@ -91,3 +91,26 @@ sidINS2sf <- function(data, resolution = 200, idINS = "idINS") {
     sidINS2square()
   sf::st_as_sf(data)
 }
+
+#' Crée idINS à partir de coordonnées.
+#'
+#' @param x Ou un vecteur de la coordonnée x, ou un df avec les colonnes x et y.
+#' @param y vecteur de la coordonnée y, si nécessaire. NULL par défaut.
+#' @param resolution resolution, par défaut 200.
+#' @param resinstr faut-il inscrire la résolution dans idINS ? Par défaut TRUE.
+#'
+#' @export
+sidINS3035 <- function(x, y=NULL, resolution=200)
+{
+  if(is.null(y))
+  {
+    y <- x[,2]
+    x <- x[,1]
+  }
+
+  x <- floor(x / resolution )
+  y <- floor(y / resolution )
+  resultat <- x*100000 + y
+
+  resultat
+}
