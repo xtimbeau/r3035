@@ -114,3 +114,20 @@ sidINS3035 <- function(x, y=NULL, resolution=200)
 
   resultat
 }
+
+#' Récupère les coordonnées X et Y de idINS.
+#'
+#' @param ids vecteur d'idINS.
+#' @param resolution resolution, par défaut celle attachée à idINS.
+#'
+#' @export
+sidINS2point <- function(ids, resolution=200)
+{
+  x <- round(ids/100000)
+  y <- round(resolution*(ids-x*100000))
+  x <- resolution*x
+  r <- resolution
+  m <- matrix(c(x+r/2,y+r/2), ncol=2)
+  colnames(m) <- c("X", "Y")
+  m
+}

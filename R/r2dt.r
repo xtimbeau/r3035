@@ -10,7 +10,7 @@
 #' @return un data.table avec un idINS
 #' @export
 #'
-r2dt <- function(raster, resolution=NULL, fun=mean)
+r2dt <- function(raster, resolution=NULL, fun=mean, shortidINS = FALSE)
 {
   base_res <- max(raster::res(raster))
   vars <- names(raster)
@@ -25,8 +25,12 @@ r2dt <- function(raster, resolution=NULL, fun=mean)
   rvars <- setdiff(vars, navars)
   if(!is.null(resolution))
   {
+    if(shortidINS)
+      ids <- sidINS3035(x,y,resolution) else
+        ids <- idINS3035(x,y,resolution)
+
     id <- stringr::str_c("idINS",resolution)
-    dt[, (stringr::str_c("idINS",resolution)):=idINS3035(x,y,resolution)]
+    dt[, (stringr::str_c("idINS",resolution)):=ids]
     dt <- dt[, lapply(.SD, function(x) fun(x, na.rm=TRUE)), by=c(id), .SDcols=rvars]
   }
   if (length(navars)>0)
@@ -74,10 +78,13 @@ getINSres <- function(dt, resolution, idINS="idINS") {
 #' @import data.table
 #'
 #' @export
-dt2r <- function (dt, resolution = NULL, idINS = "idINS")
+dt2r <- function (dt, resolution = NULL, idINS = "idINS", shortidINS = FALSE)
 {
   dt <- setDT(dt)
-  rr <- r3035:::getresINS(dt, idINS)
+  if(!shortidiNS) rr <- r3035:::getresINS(dt, idINS)
+  if(shortidiNS) {
+    rr <- NULL
+    resolution <- 200}
   ncol <- names(dt)
   if (length(rr) == 0)
     idINSin <- FALSE
@@ -95,11 +102,17 @@ dt2r <- function (dt, resolution = NULL, idINS = "idINS")
   if (!idINSin) {
     stopifnot(!is.null(res))
     stopifnot("x" %in% ncol & "y" %in% ncol)
-    dt[, `:=`(idINS, idINS3035(x, y, resolution = resolution))]
+    if(shortidINS)
+      dt[, `:=`(idINS, sidINS3035(x, y, resolution = resolution))]
+    else
+      dt[, `:=`(idINS, idINS3035(x, y, resolution = resolution))]
     idINS <- "idINS"
     res <- resolution
   }
-  xy <- idINS2point(dt[[idINS]], resolution = res)
+  if(shortidINS)
+    xy <- sidINS2point(dt[[idINS]], resolution = res)
+  if(!shortidINS)
+    xy <- idINS2point(dt[[idINS]], resolution = res)
 
   dt[, `:=`(x = xy[, 1], y = xy[, 2])]
   rref <- raster_ref(dt, resolution = res, crs = 3035)

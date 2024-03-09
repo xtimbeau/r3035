@@ -4,7 +4,7 @@
 \alias{r2dt}
 \title{Raster vers data.table}
 \usage{
-r2dt(raster, resolution = NULL, fun = mean)
+r2dt(raster, resolution = NULL, fun = mean, shortidINS = FALSE)
 }
 \arguments{
 \item{raster}{le raster \code{RatserLayer}, \code{RatserBrick},  \code{RatserStack}}
