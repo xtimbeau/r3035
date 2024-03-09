@@ -86,7 +86,7 @@ dt2r <- function (dt, resolution = NULL, idINS = "idINS", shortidINS = FALSE)
   dt <- setDT(dt)
   if(!shortidINS) rr <- r3035:::getresINS(dt, idINS)
   if(shortidINS) {
-    rr <- NULL
+    rr <- list(idINS = idINS, res = 200)
     resolution <- 200}
   ncol <- names(dt)
   if (length(rr) == 0)
