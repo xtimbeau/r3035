@@ -81,8 +81,8 @@ getINSres <- function(dt, resolution, idINS="idINS") {
 dt2r <- function (dt, resolution = NULL, idINS = "idINS", shortidINS = FALSE)
 {
   dt <- setDT(dt)
-  if(!shortidiNS) rr <- r3035:::getresINS(dt, idINS)
-  if(shortidiNS) {
+  if(!shortidINS) rr <- r3035:::getresINS(dt, idINS)
+  if(shortidINS) {
     rr <- NULL
     resolution <- 200}
   ncol <- names(dt)
