@@ -13,7 +13,7 @@ contract_idINS <- function(idINS) {
   r <- as.integer(stringr::str_sub(idINS[[1]],cr_pos,cy_pos-cr_pos))
   y <- as.integer(stringr::str_sub(idINS,cy_pos,cy_pos+lcoord)) %/% r
   x <- as.integer(stringr::str_sub(idINS,cx_pos,cx_pos+lcoord)) %/% r
-  round(x * 100000 + y)
+  as.integer(x * 100000 + y)
 }
 
 #' convertit les idINS courts en longs
@@ -28,7 +28,7 @@ expand_idINS <- function(ids, resolution=200) {
   x <- round(ids/100000)
   y <- round(resolution*(ids-x*100000))
   x <- round(resolution*x)
-  stringr::str_c("r", resolution, "N", y, "E", x)
+  stringr::str_c("r", as.integer(resolution), "N", as.integer(y), "E", as.integer(x))
 }
 
 #' Convertit l'idINS en polygone
@@ -110,7 +110,7 @@ sidINS3035 <- function(x, y=NULL, resolution=200)
   y <- floor(y / resolution )
   resultat <- x*100000 + y
 
-  return(round(resultat))
+  return(as.integer(resultat))
 }
 
 #' Récupère les coordonnées X et Y de idINS.
@@ -125,7 +125,7 @@ sidINS2point <- function(ids, resolution=200)
   y <- round(resolution*(ids-x*100000))
   x <- round(resolution*x)
   r <- resolution
-  m <- matrix(c(x+r/2,y+r/2), ncol=2)
+  m <- matrix(c(as.integer(x+r/2),as.integer(y+r/2)), ncol=2)
   colnames(m) <- c("X", "Y")
   m
 }
