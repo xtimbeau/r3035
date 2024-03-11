@@ -208,8 +208,8 @@ sidINS2lonlat <- function(idINS, resolution=200) {
   if(length(idINS)==0)
     return(tibble::tibble(lon=numeric(), lat=numeric()))
   resolution <- as.integer(resolution)
-  x <- ids%/%100000L
-  y <- resolution*(ids-x*100000L)
+  x <- idINS%/%100000L
+  y <- resolution*(idINS-x*100000L)
   x <- resolution*x
   x <- x+r/2
   y <- y+r/2
