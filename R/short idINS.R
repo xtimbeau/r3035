@@ -25,9 +25,9 @@ contract_idINS <- function(idINS) {
 #' @export
 #'
 expand_idINS <- function(ids, resolution=200) {
-  x <- round(ids/100000)
-  y <- round(resolution*(ids-x*100000))
-  x <- round(resolution*x)
+  x <- ids%/%100000L
+  y <- as.integer(resolution)*(ids-x*100000L)
+  x <- as.integer(resolution)*x
   stringr::str_c("r", as.integer(resolution), "N", as.integer(y), "E", as.integer(x))
 }
 
@@ -40,8 +40,10 @@ expand_idINS <- function(ids, resolution=200) {
 #'
 sidINS2square <- function(ids, resolution=200)
 {
-  x <- round(ids/100000)
-  y <- round(resolution*(ids-x*100000))
+  ids <- as.integer(ids)
+  resolution <- as.integer(resolution)
+  x <- ids%/%100000L
+  y <- resolution*(ids-x*100000L)
   x <- resolution*x
   purrr::pmap(list(x,y), ~sf::st_polygon(
     list(matrix(
@@ -66,11 +68,11 @@ sidINS2dist <- function(fromidINS, toidINS, resolution=200) {
   if(length(fromidINS)==0)
     return(numeric())
 
-  fromx <- round(fromidINS/100000)
-  fromy <- round((fromidINS-fromx*100000))
+  fromx <- as.integer(fromidINS)%/%100000
+  fromy <- as.integer(fromidINS)-fromx*100000
 
-  tox <- round(toidINS/100000)
-  toy <- round((toidINS-tox*100000))
+  tox <- as.integer(toidINS)%/%100000
+  toy <- as.integer(toidINS)-tox*100000
 
   return(resolution*sqrt((tox-fromx)^2 + (toy-fromy)^2))
 }
@@ -106,11 +108,11 @@ sidINS3035 <- function(x, y=NULL, resolution=200)
     x <- x[,1]
   }
 
-  x <- floor(x / resolution )
-  y <- floor(y / resolution )
-  resultat <- x*100000 + y
+  x <- as.integer(floor(x / resolution ))
+  y <- as.integer(floor(y / resolution ))
+  resultat <- x*100000L + y
 
-  return(as.integer(resultat))
+  return(resultat)
 }
 
 #' Récupère les coordonnées X et Y de idINS.
