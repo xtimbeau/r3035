@@ -197,3 +197,42 @@ sdt2r <- function (dt, resolution = 200, idINS = "idINS")
   raster::crs(brickette) <- 3035
   brickette
 }
+
+#' Retrieves (lon, lat) coordinates from long idINS.
+#'
+#' @param idINS character vector of idINS
+#' @param resolution default to NULL. Set to convert id with different resolutions
+#'
+#' @export
+sidINS2lonlat <- function(idINS, resolution=200) {
+  if(length(idINS)==0)
+    return(tibble::tibble(lon=numeric(), lat=numeric()))
+  resolution <- as.integer(resolution)
+  x <- ids%/%100000L
+  y <- resolution*(ids-x*100000L)
+  x <- resolution*x
+  x <- x+r/2
+  y <- y+r/2
+  lonlat <- sf_project(
+    from=st_crs(3035),
+    to=st_crs(4326),
+    pts = matrix(c(x,y), nrow=length(x), ncol=2))
+  return(
+    tibble(lon = lonlat[, 1], lat = lonlat[, 2]))
+}
+
+#' Retrieves (lon, lat) coordinates from long or short idINS.
+#'
+#' @param idINS character or integer vector of idINS
+#' @param resolution default to NULL. Set to convert id with different resolutions
+#'
+#' @export
+idINS2lonlat <- function(idINS, resolution=NULL) {
+  if(is.character(idINS))
+    return(lidINS2lonlat(idINS, resolution))
+  if(is.null(resolution))
+    resolution <- 200
+  if(is.integer(idINS))
+    returne(sidINS2lonlat(idINS, resolution))
+  stop("idINS must be character or integer")
+}
