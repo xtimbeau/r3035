@@ -207,10 +207,10 @@ sdt2r <- function (dt, resolution = 200, idINS = "idINS")
 sidINS2lonlat <- function(idINS, resolution=200) {
   if(length(idINS)==0)
     return(tibble::tibble(lon=numeric(), lat=numeric()))
-  resolution <- as.integer(resolution)
+  r <- as.integer(resolution)
   x <- idINS%/%100000L
-  y <- resolution*(idINS-x*100000L)
-  x <- resolution*x
+  y <- r*(idINS-x*100000L)
+  x <- r*x
   x <- x+r/2
   y <- y+r/2
   lonlat <- sf_project(
