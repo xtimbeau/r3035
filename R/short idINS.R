@@ -233,6 +233,6 @@ idINS2lonlat <- function(idINS, resolution=NULL) {
   if(is.null(resolution))
     resolution <- 200
   if(is.integer(idINS))
-    returne(sidINS2lonlat(idINS, resolution))
+    return(sidINS2lonlat(idINS, resolution))
   stop("idINS must be character or integer")
 }
