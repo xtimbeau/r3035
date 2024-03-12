@@ -115,7 +115,7 @@ sidINS3035 <- function(x, y=NULL, resolution=200)
   return(resultat)
 }
 
-#' Récupère les coordonnées X et Y de idINS.
+#' Récupère les coordonnées X et Y de idINS court.
 #'
 #' @param ids vecteur d'idINS.
 #' @param resolution resolution, par défaut celle attachée à idINS.
@@ -131,7 +131,6 @@ sidINS2point <- function(ids, resolution=200)
   colnames(m) <- c("X", "Y")
   m
 }
-
 
 #' Raster vers data.table avec idINS short
 #'
@@ -236,3 +235,75 @@ idINS2lonlat <- function(idINS, resolution=NULL) {
     return(sidINS2lonlat(idINS, resolution))
   stop("idINS must be character or integer")
 }
+
+#' Récupère les coordonnées X et Y de idINS court ou long.
+#'
+#' @param ids vecteur d'idINS.
+#' @param resolution resolution, par défaut celle attachée à idINS.
+#'
+#' @export
+idINS2point <- function(ids, resolution=NULL)
+{
+  if(is.character(idINS))
+    return(lidINS2point(idINS, resolution))
+  if(is.null(resolution))
+    resolution <- 200
+  if(is.integer(idINS))
+    return(sidINS2point(idINS, resolution))
+  stop("idINS must be character or integer")
+}
+
+#' Récupère les coordonnées X et Y de idINS court ou long.
+#'
+#' @param ids vecteur d'idINS.
+#' @param resolution resolution, par défaut celle attachée à idINS.
+#'
+#' @export
+idINS2square <- function(ids, resolution=NULL)
+{
+  if(is.character(idINS))
+    return(lidINS2square(idINS, resolution))
+  if(is.null(resolution))
+    resolution <- 200
+  if(is.integer(idINS))
+    return(sidINS2square(idINS, resolution))
+  stop("idINS must be character or integer")
+}
+
+#' Calculate euclidean distance between to long or short idINS, in meter
+#'
+#' @param fromidINS character vector of starting idINS
+#' @param toidINS character vector of ending idINS
+#' @param resolution default to NULL. Set if no resolution is provided in idINS
+#'
+#' @export
+#'
+
+lidINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
+  if(is.character(idINS))
+    return(lidINS2dist(fromidINS, toidINS, resolution))
+  if(is.null(resolution))
+    resolution <- 200
+  if(is.integer(idINS))
+    return(sidINS2dist(fromidINS, toidINS, resolutionn))
+  stop("idINS must be character or integer")
+}
+
+#' retourne un sf à partir d'un data.frame avec un champ idINS
+#'
+#' @param data le data frame
+#' @param resolution 200m par défaut
+#' @param idINS le champ qui contient l'idINS court (défaut "idINS")
+#'
+#' @return un sf
+#' @export
+#'
+idINS2sf <- function(data, resolution = 200, idINS = "idINS") {
+  if(is.character(idINS))
+    return(lidINS2sf(data, resolution, idINS))
+  if(is.null(resolution))
+    resolution <- 200
+  if(is.integer(idINS))
+    return(sidINS2sf(data, resolution, idINS))
+  stop("idINS must be character or integer")
+  }

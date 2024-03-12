@@ -5,7 +5,7 @@
 #'
 #' @export
 #'
-idINS2square <- function(ids, resolution=NULL)
+lidINS2square <- function(ids, resolution=NULL)
 {
   cr_pos <- stringr::str_locate(ids[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(ids[[1]], "N(?=[0-9])")[,"start"]+1
@@ -25,13 +25,13 @@ idINS2square <- function(ids, resolution=NULL)
     sf::st_sfc(crs=3035)
 }
 
-#' Récupère les coordonnées X et Y de idINS.
+#' Récupère les coordonnées X et Y de idINS long
 #'
 #' @param ids vecteur d'idINS.
 #' @param resolution resolution, par défaut celle attachée à idINS.
 #'
 #' @export
-idINS2point <- function(ids, resolution=NULL)
+lidINS2point <- function(ids, resolution=NULL)
 {
   cr_pos <- stringr::str_locate(ids[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(ids[[1]], "N(?=[0-9])")[,"start"]+1
@@ -192,7 +192,7 @@ lidINS2lonlat <- function(idINS, resolution=NULL) {
 }
 
 
-#' Calculate euclidean distance between to idINS, in meter
+#' Calculate euclidean distance between to long idINS, in meter
 #'
 #' @param fromidINS character vector of starting idINS
 #' @param toidINS character vector of ending idINS
@@ -201,7 +201,7 @@ lidINS2lonlat <- function(idINS, resolution=NULL) {
 #' @export
 #'
 
-idINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
+lidINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
   stopifnot(length(fromidINS)==length(toidINS))
   if(length(fromidINS)==0)
     return(numeric())
@@ -231,4 +231,19 @@ idINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
   tox <- as.numeric(stringr::str_sub(toidINS,cx_pos,cx_pos+lcoord))+tor/2
 
   return(sqrt((tox-fromx)^2 + (toy-fromy)^2))
+}
+
+#' retourne un sf à partir d'un data.frame avec un champ idINS long
+#'
+#' @param data le data frame
+#' @param resolution 200m par défaut
+#' @param idINS le champ qui contient l'idINS court (défaut "idINS")
+#'
+#' @return un sf
+#' @export
+#'
+lidINS2sf <- function(data, resolution = 200, idINS = "idINS") {
+  data$geometry <- data[[idINS]] |>
+    lidINS2square()
+  sf::st_as_sf(data)
 }

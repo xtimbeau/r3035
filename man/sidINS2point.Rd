@@ -2,7 +2,7 @@
 % Please edit documentation in R/short idINS.R
 \name{sidINS2point}
 \alias{sidINS2point}
-\title{Récupère les coordonnées X et Y de idINS.}
+\title{Récupère les coordonnées X et Y de idINS court.}
 \usage{
 sidINS2point(ids, resolution = 200)
 }
@@ -12,5 +12,5 @@ sidINS2point(ids, resolution = 200)
 \item{resolution}{resolution, par défaut celle attachée à idINS.}
 }
 \description{
-Récupère les coordonnées X et Y de idINS.
+Récupère les coordonnées X et Y de idINS court.
 }
