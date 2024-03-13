@@ -279,7 +279,7 @@ idINS2square <- function(ids, resolution=NULL)
 #' @export
 #'
 
-lidINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
+idINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
   if(is.character(idINS))
     return(lidINS2dist(fromidINS, toidINS, resolution))
   if(is.null(resolution))
