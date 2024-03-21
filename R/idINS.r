@@ -52,7 +52,7 @@ lidINS2point <- function(ids, resolution=NULL)
 #'
 #' @param x Ou un vecteur de la coordonnée x, ou un df avec les colonnes x et y.
 #' @param y vecteur de la coordonnée y, si nécessaire. NULL par défaut.
-#' @param resolution resolution, par défaut 200.
+#' @param resolution résolution, par défaut 200.
 #' @param resinstr faut-il inscrire la résolution dans idINS ? Par défaut TRUE.
 #'
 #' @export

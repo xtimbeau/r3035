@@ -10,6 +10,8 @@ idINS2point(ids, resolution = NULL)
 \item{ids}{vecteur d'idINS.}
 
 \item{resolution}{resolution, par défaut celle attachée à idINS.}
+
+\item{idINS}{le champ qui contient l'idINS court (défaut "idINS")}
 }
 \description{
 Récupère les coordonnées X et Y de idINS court ou long.
