@@ -286,7 +286,7 @@ idINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
   if(is.null(resolution))
     resolution <- 200
   if(is.integer(fromidINS)&is.integer(toidINS))
-    return(sidINS2dist(fromidINS, toidINS, resolutionn))
+    return(sidINS2dist(fromidINS, toidINS, resolution))
   stop("idINS must be character or integer")
 }
 
