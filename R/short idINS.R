@@ -280,11 +280,11 @@ idINS2square <- function(ids, resolution=NULL)
 #'
 
 idINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
-  if(is.character(idINS))
+  if(is.character(fromidINS)&is.character(toidINS))
     return(lidINS2dist(fromidINS, toidINS, resolution))
   if(is.null(resolution))
     resolution <- 200
-  if(is.integer(idINS))
+  if(is.integer(fromidINS)&is.integer(toidINS))
     return(sidINS2dist(fromidINS, toidINS, resolutionn))
   stop("idINS must be character or integer")
 }
