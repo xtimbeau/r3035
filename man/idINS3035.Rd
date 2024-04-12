@@ -11,7 +11,7 @@ idINS3035(x, y = NULL, resolution = 200, resinstr = TRUE)
 
 \item{y}{vecteur de la coordonnée y, si nécessaire. NULL par défaut.}
 
-\item{resolution}{resolution, par défaut 200.}
+\item{resolution}{résolution, par défaut 200.}
 
 \item{resinstr}{faut-il inscrire la résolution dans idINS ? Par défaut TRUE.}
 }

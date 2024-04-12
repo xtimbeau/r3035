@@ -239,17 +239,18 @@ idINS2lonlat <- function(idINS, resolution=NULL) {
 #' Récupère les coordonnées X et Y de idINS court ou long.
 #'
 #' @param ids vecteur d'idINS.
+#' @param idINS le champ qui contient l'idINS court (défaut "idINS")
 #' @param resolution resolution, par défaut celle attachée à idINS.
 #'
 #' @export
 idINS2point <- function(ids, resolution=NULL)
 {
-  if(is.character(idINS))
-    return(lidINS2point(idINS, resolution))
+  if(is.character(ids))
+    return(lidINS2point(ids, resolution=resolution))
   if(is.null(resolution))
     resolution <- 200
-  if(is.integer(idINS))
-    return(sidINS2point(idINS, resolution))
+  if(is.integer(ids))
+    return(sidINS2point(ids, resolution=resolution))
   stop("idINS must be character or integer")
 }
 
