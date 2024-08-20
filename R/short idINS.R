@@ -262,13 +262,13 @@ idINS2point <- function(ids, resolution=NULL)
 #' @export
 idINS2square <- function(ids, resolution=NULL)
 {
-  if(is.character(idINS))
-    return(lidINS2square(idINS, resolution))
+  if(is.character(ids))
+    return(lidINS2square(ids, resolution))
   if(is.null(resolution))
     resolution <- 200
-  if(is.integer(idINS))
-    return(sidINS2square(idINS, resolution))
-  stop("idINS must be character or integer")
+  if(is.integer(ids))
+    return(sidINS2square(ids, resolution))
+  stop("ids must be character or integer")
 }
 
 #' Calculate euclidean distance between to long or short idINS, in meter
