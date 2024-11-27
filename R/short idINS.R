@@ -11,8 +11,8 @@ contract_idINS <- function(idINS) {
   cx_pos <- stringr::str_locate(idINS[[1]], "E(?=[0-9])")[,"start"]+1
   lcoord <- cx_pos-cy_pos-1
   r <- as.integer(stringr::str_sub(idINS[[1]],cr_pos,cy_pos-cr_pos))
-  y <- as.integer(stringr::str_sub(idINS,cy_pos,cy_pos+lcoord)) %/% r
-  x <- as.integer(stringr::str_sub(idINS,cx_pos,cx_pos+lcoord)) %/% r
+  y <- as.integer(stringr::str_sub(idINS, cy_pos, cy_pos + lcoord - 1)) %/% r
+  x <- as.integer(stringr::str_sub(idINS, cx_pos)) %/% r
   as.integer(x * 100000 + y)
 }
 
