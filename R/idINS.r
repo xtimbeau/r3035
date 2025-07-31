@@ -10,7 +10,7 @@ lidINS2square <- function(ids, resolution=NULL)
   cr_pos <- stringr::str_locate(ids[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(ids[[1]], "N(?=[0-9])")[,"start"]+1
   cx_pos <- stringr::str_locate(ids[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-1
+  lcoord <- cx_pos-cy_pos-2
   y <- as.numeric(stringr::str_sub(ids,cy_pos,cy_pos+lcoord))
   x <- as.numeric(stringr::str_sub(ids,cx_pos,cx_pos+lcoord))
   r <- if(is.null(resolution))
@@ -36,7 +36,7 @@ lidINS2point <- function(ids, resolution=NULL)
   cr_pos <- stringr::str_locate(ids[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(ids[[1]], "N(?=[0-9])")[,"start"]+1
   cx_pos <- stringr::str_locate(ids[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-1
+  lcoord <- cx_pos-cy_pos-2
   y <- as.numeric(stringr::str_sub(ids,cy_pos,cy_pos+lcoord))
   x <- as.numeric(stringr::str_sub(ids,cx_pos,cx_pos+lcoord))
   r <- if(is.null(resolution))
@@ -151,7 +151,7 @@ idINS2lonlat <- function(idINS, resolution=NULL) {
   cr_pos <- stringr::str_locate(idINS[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(idINS[[1]], "N(?=[0-9])")[,"start"]+1
   cx_pos <- stringr::str_locate(idINS[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-1
+  lcoord <- cx_pos-cy_pos-2
   y <- as.numeric(stringr::str_sub(idINS,cy_pos,cy_pos+lcoord))
   x <- as.numeric(stringr::str_sub(idINS,cx_pos,cx_pos+lcoord))
   r <- if(is.null(resolution))
@@ -180,7 +180,7 @@ lidINS2lonlat <- function(idINS, resolution=NULL) {
   cr_pos <- stringr::str_locate(idINS[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(idINS[[1]], "N(?=[0-9])")[,"start"]+1
   cx_pos <- stringr::str_locate(idINS[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-1
+  lcoord <- cx_pos-cy_pos-2
   y <- as.numeric(stringr::str_sub(idINS,cy_pos,cy_pos+lcoord))
   x <- as.numeric(stringr::str_sub(idINS,cx_pos,cx_pos+lcoord))
   r <- if(is.null(resolution))
@@ -215,7 +215,7 @@ lidINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
   cr_pos <- stringr::str_locate(fromidINS[[1]], "r(?=[0-9])")[,"start"]+1
   cy_pos <- stringr::str_locate(fromidINS[[1]], "N(?=[0-9])")[,"start"]+1
   cx_pos <- stringr::str_locate(fromidINS[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-1
+  lcoord <- cx_pos-cy_pos-2
   fromr <- if(is.null(resolution))
     as.numeric(stringr::str_sub(fromidINS,cr_pos,cy_pos-cr_pos))
   else
