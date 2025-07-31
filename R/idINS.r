@@ -118,21 +118,17 @@ coord2idINS <- function(x, y = NULL, resolution = 200) {
 #' @param stop_if_res_not_cst default to TRUE. Refuse to convert id with different resolutions
 #'
 #' @export
-idINS2coord <- function(ids, stop_if_res_not_cst = TRUE) {
-  browser()
-  cr_pos <- stringr::str_locate(ids[[1]], "r(?=[0-9])|RES(?=[0-9])")[,"start"]+1
-  cy_pos <- stringr::str_locate(ids[[1]], "N(?=[0-9])")[,"start"]+1
-  cx_pos <- stringr::str_locate(ids[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-1
-  y <- as.numeric(stringr::str_sub(ids,cy_pos,cy_pos+lcoord))
-  x <- as.numeric(stringr::str_sub(ids,cx_pos,cx_pos+lcoord))
-  r <- if(is.null(resolution))
-    as.numeric(stringr::str_sub(idINS,cr_pos,cy_pos-cr_pos))
-  else
-    rep(resolution, length(x))
-  x <- lapply(ids, FUN = function(liste) liste[4]) |> unlist() |> as.numeric()
-  y <- lapply(ids, FUN = function(liste) liste[3]) |> unlist() |> as.numeric()
+idINS2coord <- function(ids, stop_if_res_not_cst = TRUE, resolution = 200) {
 
+  cr_pos <- stringr::str_locate(ids[[1]], "(?<=r)[0-9]+|(?<=RES)[0-9]+")
+  cy_pos <- stringr::str_locate(ids[[1]], "(?<=N)[0-9]+")
+  cx_pos <- stringr::str_locate(ids[[1]], "(?<=E)[0-9]+")
+  y <- as.numeric(stringr::str_sub(ids,cy_pos[[1]],cy_pos[[2]]))
+  x <- as.numeric(stringr::str_sub(ids,cx_pos[[1]],cx_pos[[2]]))
+  r <- if(is.null(resolution))
+    as.numeric(stringr::str_sub(ids[[1]],cr_pos[[1]], cr_pos[[2]]))
+  else
+    resolution
   res <- matrix(c(x + resolution/2, y + resolution/2), ncol = 2)
   colnames(res) <- c("x", "y")
 
@@ -148,16 +144,15 @@ idINS2coord <- function(ids, stop_if_res_not_cst = TRUE) {
 idINS2lonlat <- function(idINS, resolution=NULL) {
   if(length(idINS)==0)
     return(tibble::tibble(lon=numeric(), lat=numeric()))
-  cr_pos <- stringr::str_locate(idINS[[1]], "r(?=[0-9])")[,"start"]+1
-  cy_pos <- stringr::str_locate(idINS[[1]], "N(?=[0-9])")[,"start"]+1
-  cx_pos <- stringr::str_locate(idINS[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-2
-  y <- as.numeric(stringr::str_sub(idINS,cy_pos,cy_pos+lcoord))
-  x <- as.numeric(stringr::str_sub(idINS,cx_pos,cx_pos+lcoord))
+  cr_pos <- stringr::str_locate(idINS[[1]], "(?<=r)[0-9]+|(?<=RES)[0-9]+")
+  cy_pos <- stringr::str_locate(idINS[[1]], "(?<=N)[0-9]+")
+  cx_pos <- stringr::str_locate(idINS[[1]], "(?<=E)[0-9]+")
+  y <- as.numeric(stringr::str_sub(idINS,cy_pos[[1]],cy_pos[[2]]))
+  x <- as.numeric(stringr::str_sub(idINS,cx_pos[[1]],cx_pos[[2]]))
   r <- if(is.null(resolution))
-    as.numeric(stringr::str_sub(idINS,cr_pos,cy_pos-cr_pos))
+    as.numeric(stringr::str_sub(idINS[[1]],cr_pos[[1]], cr_pos[[2]]))
   else
-    rep(resolution, length(x))
+    resolution
   x <- x+r/2
   y <- y+r/2
   lonlat <- sf_project(
@@ -177,16 +172,15 @@ idINS2lonlat <- function(idINS, resolution=NULL) {
 lidINS2lonlat <- function(idINS, resolution=NULL) {
   if(length(idINS)==0)
     return(tibble::tibble(lon=numeric(), lat=numeric()))
-  cr_pos <- stringr::str_locate(idINS[[1]], "r(?=[0-9])")[,"start"]+1
-  cy_pos <- stringr::str_locate(idINS[[1]], "N(?=[0-9])")[,"start"]+1
-  cx_pos <- stringr::str_locate(idINS[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-2
-  y <- as.numeric(stringr::str_sub(idINS,cy_pos,cy_pos+lcoord))
-  x <- as.numeric(stringr::str_sub(idINS,cx_pos,cx_pos+lcoord))
+  cr_pos <- stringr::str_locate(idINS[[1]], "(?<=r)[0-9]+|(?<=RES)[0-9]+")
+  cy_pos <- stringr::str_locate(idINS[[1]], "(?<=N)[0-9]+")
+  cx_pos <- stringr::str_locate(idINS[[1]], "(?<=E)[0-9]+")
+  y <- as.numeric(stringr::str_sub(idINS,cy_pos[[1]],cy_pos[[2]]))
+  x <- as.numeric(stringr::str_sub(idINS,cx_pos[[1]],cx_pos[[2]]))
   r <- if(is.null(resolution))
-    as.numeric(stringr::str_sub(idINS,cr_pos,cy_pos-cr_pos))
+    as.numeric(stringr::str_sub(idINS[[1]],cr_pos[[1]], cr_pos[[2]]))
   else
-    rep(resolution, length(x))
+    resolution
   x <- x+r/2
   y <- y+r/2
   lonlat <- sf_project(
@@ -212,29 +206,25 @@ lidINS2dist <- function(fromidINS, toidINS, resolution=NULL) {
   if(length(fromidINS)==0)
     return(numeric())
 
-  cr_pos <- stringr::str_locate(fromidINS[[1]], "r(?=[0-9])")[,"start"]+1
-  cy_pos <- stringr::str_locate(fromidINS[[1]], "N(?=[0-9])")[,"start"]+1
-  cx_pos <- stringr::str_locate(fromidINS[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-2
-  fromr <- if(is.null(resolution))
-    as.numeric(stringr::str_sub(fromidINS,cr_pos,cy_pos-cr_pos))
+  cr_pos <- stringr::str_locate(fromidINS[[1]], "(?<=r)[0-9]+|(?<=RES)[0-9]+")
+  cy_pos <- stringr::str_locate(fromidINS[[1]], "(?<=N)[0-9]+")
+  cx_pos <- stringr::str_locate(fromidINS[[1]], "(?<=E)[0-9]+")
+  r <- if(is.null(resolution))
+    as.numeric(stringr::str_sub(fromidINS[[1]],cr_pos[[1]], cr_pos[[2]]))
   else
-    rep(resolution, length(fromidINS))
+    resolution
+  fromy <- as.numeric(stringr::str_sub(fromidINS,cy_pos[[1]],cy_pos[[2]]))+r/2
+  fromx <- as.numeric(stringr::str_sub(fromidINS,cx_pos[[1]],cx_pos[[2]]))+r/2
 
-  fromy <- as.numeric(stringr::str_sub(fromidINS,cy_pos,cy_pos+lcoord))+fromr/2
-  fromx <- as.numeric(stringr::str_sub(fromidINS,cx_pos,cx_pos+lcoord))+fromr/2
-
-  cr_pos <- stringr::str_locate(toidINS[[1]], "r(?=[0-9])")[,"start"]+1
-  cy_pos <- stringr::str_locate(toidINS[[1]], "N(?=[0-9])")[,"start"]+1
-  cx_pos <- stringr::str_locate(toidINS[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-1
-  tor <- if(is.null(resolution))
-    as.numeric(stringr::str_sub(toidINS,cr_pos,cy_pos-cr_pos))
+  cr_pos <- stringr::str_locate(toidINS[[1]], "(?<=r)[0-9]+|(?<=RES)[0-9]+")
+  cy_pos <- stringr::str_locate(toidINS[[1]], "(?<=N)[0-9]+")
+  cx_pos <- stringr::str_locate(toidINS[[1]], "(?<=E)[0-9]+")
+  r <- if(is.null(resolution))
+    as.numeric(stringr::str_sub(toidINS[[1]],cr_pos[[1]], cr_pos[[2]]))
   else
-    rep(resolution, length(toidINS))
-
-  toy <- as.numeric(stringr::str_sub(toidINS,cy_pos,cy_pos+lcoord))+tor/2
-  tox <- as.numeric(stringr::str_sub(toidINS,cx_pos,cx_pos+lcoord))+tor/2
+    resolution
+  toy <- as.numeric(stringr::str_sub(toidINS,cy_pos[[1]],cy_pos[[2]]))+r/2
+  tox <- as.numeric(stringr::str_sub(toidINS,cx_pos[[1]],cx_pos[[2]]))+r/2
 
   return(sqrt((tox-fromx)^2 + (toy-fromy)^2))
 }
