@@ -197,7 +197,7 @@ sdt2r <- function (dt, resolution = 200, idINS = "idINS")
   brickette
 }
 
-#' Retrieves (lon, lat) coordinates from long idINS.
+#' Retrieves (lon, lat) coordinates from short idINS.
 #'
 #' @param idINS character vector of idINS
 #' @param resolution default to NULL. Set to convert id with different resolutions

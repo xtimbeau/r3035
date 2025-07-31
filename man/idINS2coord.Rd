@@ -5,7 +5,7 @@
 \title{Retrieves (x, y) coordinates from idINS.
 Used to work with crs 3035}
 \usage{
-idINS2coord(ids, stop_if_res_not_cst = TRUE, resolution = 200)
+idINS2coord(ids, stop_if_res_not_cst = TRUE, resolution = NULL)
 }
 \arguments{
 \item{ids}{character vector of idINS}

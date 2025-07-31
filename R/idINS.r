@@ -7,20 +7,19 @@
 #'
 lidINS2square <- function(ids, resolution=NULL)
 {
-  cr_pos <- stringr::str_locate(ids[[1]], "r(?=[0-9])")[,"start"]+1
-  cy_pos <- stringr::str_locate(ids[[1]], "N(?=[0-9])")[,"start"]+1
-  cx_pos <- stringr::str_locate(ids[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-2
-  y <- as.numeric(stringr::str_sub(ids,cy_pos,cy_pos+lcoord))
-  x <- as.numeric(stringr::str_sub(ids,cx_pos,cx_pos+lcoord))
+  cr_pos <- stringr::str_locate(ids[[1]], "(?<=r)[0-9]+|(?<=RES)[0-9]+")
+  cy_pos <- stringr::str_locate(ids[[1]], "(?<=N)[0-9]+")
+  cx_pos <- stringr::str_locate(ids[[1]], "(?<=E)[0-9]+")
+  y <- as.numeric(stringr::str_sub(ids,cy_pos[[1]],cy_pos[[2]]))
+  x <- as.numeric(stringr::str_sub(ids,cx_pos[[1]],cx_pos[[2]]))
   r <- if(is.null(resolution))
-    as.numeric(stringr::str_sub(ids,cr_pos,cy_pos-cr_pos))
+    as.numeric(stringr::str_sub(ids[[1]],cr_pos[[1]], cr_pos[[2]]))
   else
-    rep(resolution, length(x))
-  purrr::pmap(list(x,y,r), ~sf::st_polygon(
+    resolution
+  purrr::pmap(list(x,y), ~sf::st_polygon(
     list(matrix(
-      c(..1, ..1+..3,..1+..3,..1, ..1,
-        ..2, ..2, ..2+..3,..2+..3,..2),
+      c(..1, ..1+r,..1+r,..1, ..1,
+        ..2, ..2, ..2+r,..2+r,..2),
       nrow=5, ncol=2))))  |>
     sf::st_sfc(crs=3035)
 }
@@ -33,16 +32,15 @@ lidINS2square <- function(ids, resolution=NULL)
 #' @export
 lidINS2point <- function(ids, resolution=NULL)
 {
-  cr_pos <- stringr::str_locate(ids[[1]], "r(?=[0-9])")[,"start"]+1
-  cy_pos <- stringr::str_locate(ids[[1]], "N(?=[0-9])")[,"start"]+1
-  cx_pos <- stringr::str_locate(ids[[1]], "E(?=[0-9])")[,"start"]+1
-  lcoord <- cx_pos-cy_pos-2
-  y <- as.numeric(stringr::str_sub(ids,cy_pos,cy_pos+lcoord))
-  x <- as.numeric(stringr::str_sub(ids,cx_pos,cx_pos+lcoord))
+  cr_pos <- stringr::str_locate(ids[[1]], "(?<=r)[0-9]+|(?<=RES)[0-9]+")
+  cy_pos <- stringr::str_locate(ids[[1]], "(?<=N)[0-9]+")
+  cx_pos <- stringr::str_locate(ids[[1]], "(?<=E)[0-9]+")
+  y <- as.numeric(stringr::str_sub(ids,cy_pos[[1]],cy_pos[[2]]))
+  x <- as.numeric(stringr::str_sub(ids,cx_pos[[1]],cx_pos[[2]]))
   r <- if(is.null(resolution))
-    as.numeric(stringr::str_sub(ids,cr_pos,cy_pos-cr_pos))
+    as.numeric(stringr::str_sub(ids[[1]],cr_pos[[1]], cr_pos[[2]]))
   else
-    rep(resolution, length(x))
+    resolution
   m <- matrix(c(x+r/2,y+r/2), ncol=2)
   colnames(m) <- c("X", "Y")
   m
@@ -118,7 +116,7 @@ coord2idINS <- function(x, y = NULL, resolution = 200) {
 #' @param stop_if_res_not_cst default to TRUE. Refuse to convert id with different resolutions
 #'
 #' @export
-idINS2coord <- function(ids, stop_if_res_not_cst = TRUE, resolution = 200) {
+idINS2coord <- function(ids, stop_if_res_not_cst = TRUE, resolution = NULL) {
 
   cr_pos <- stringr::str_locate(ids[[1]], "(?<=r)[0-9]+|(?<=RES)[0-9]+")
   cy_pos <- stringr::str_locate(ids[[1]], "(?<=N)[0-9]+")

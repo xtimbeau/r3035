@@ -2,7 +2,7 @@
 % Please edit documentation in R/short idINS.R
 \name{sidINS2lonlat}
 \alias{sidINS2lonlat}
-\title{Retrieves (lon, lat) coordinates from long idINS.}
+\title{Retrieves (lon, lat) coordinates from short idINS.}
 \usage{
 sidINS2lonlat(idINS, resolution = 200)
 }
@@ -12,5 +12,5 @@ sidINS2lonlat(idINS, resolution = 200)
 \item{resolution}{default to NULL. Set to convert id with different resolutions}
 }
 \description{
-Retrieves (lon, lat) coordinates from long idINS.
+Retrieves (lon, lat) coordinates from short idINS.
 }
