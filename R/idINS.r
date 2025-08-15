@@ -127,7 +127,7 @@ idINS2coord <- function(ids, stop_if_res_not_cst = TRUE, resolution = NULL) {
     as.numeric(stringr::str_sub(ids[[1]],cr_pos[[1]], cr_pos[[2]]))
   else
     resolution
-  res <- matrix(c(x + resolution/2, y + resolution/2), ncol = 2)
+  res <- matrix(c(x + r/2, y + r/2), ncol = 2)
   colnames(res) <- c("x", "y")
 
   res
